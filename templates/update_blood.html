@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Blood Stock</title>
+    <style>
+        /* General Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    background-color: #ffe6e6; /* Light red background */
+    color: #721c24;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+h1 {
+    background-color: #c82333; /* Blood red header */
+    color: white;
+    padding: 15px;
+    margin: 0;
+}
+
+/* Form Styling */
+form {
+    display: inline-block;
+    text-align: left;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: #c82333;
+}
+
+input, select {
+    display: block;
+    width: 85%;
+    padding: 8px;
+    margin: 5px 0 10px;
+    border: 1px solid #c82333;
+    border-radius: 5px;
+}
+
+button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #c82333; /* Red themed button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #721c24;
+}
+
+/* Table Styling */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    border: 1px solid #c82333;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #c82333;
+    color: white;
+}
+
+/* Delete Button */
+.delete-btn {
+    background-color: red;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.delete-btn:hover {
+    background-color: darkred;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    form {
+        width: 90%;
+    }
+
+    table {
+        width: 100%;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <h1>Update Blood Availability</h1>
+
+    <form action="/update_blood" method="POST">
+        <label for="hospital_name">Hospital Name:</label>
+        <input type="text" id="hospital_name" name="hospital_name" required>
+
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
+
+        <label for="blood_group">Blood Group:</label>
+        <select name="blood_group" id="blood_group">
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+        </select>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required>
+
+        <label for="donor_name">Donor Name:</label>
+        <input type="text" id="donor_name" name="donor_name" required>
+
+        <button type="submit">Update Blood Stock</button>
+    </form>
+
+    <hr>
+
+    <h2>Current Blood Stocks</h2>
+    {% if blood_data %}
+        <table>
+            <tr>
+                <th>Blood Group</th>
+                <th>Hospital</th>
+                <th>Location</th>
+                <th>Quantity</th>
+                <th>Donor Name</th>
+                <th>Action</th>
+            </tr>
+            {% for blood_group, entries in blood_data.items() %}
+                {% for entry in entries %}
+                    <tr>
+                        <td>{{ blood_group }}</td>
+                        <td>{{ entry.hospital }}</td>
+                        <td>{{ entry.location }}</td>
+                        <td>{{ entry.quantity }}</td>
+                        <td>{{ entry.donor_name }}</td>
+                        <td>
+                            <form action="/delete_blood" method="POST" style="display:inline;">
+                                <input type="hidden" name="hospital_name" value="{{ entry.hospital }}">
+                                <input type="hidden" name="blood_group" value="{{ blood_group }}">
+                                <input type="hidden" name="donor_name" value="{{ entry.donor_name }}">
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No blood data available.</p>
+    {% endif %}
+</body>
+</html>
