@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor History</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Donor History</h1>
+    <table>
+        <tr>
+            <th>Donor Name</th>
+            <th>Blood Group</th>
+            <th>Hospital</th>
+            <th>Location</th>
+            <th>Quantity</th>
+            <th>Donation Date</th>
+        </tr>
+        {% for donor in donors %}
+            <tr>
+                <td>{{ donor[0] }}</td>
+                <td>{{ donor[1] }}</td>
+                <td>{{ donor[2] }}</td>
+                <td>{{ donor[3] }}</td>
+                <td>{{ donor[4] }}</td>
+                <td>{{ donor[5] }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="/">Back to Home</a>
+</body>
+</html>

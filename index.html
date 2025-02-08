@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation App</title>
+    <link rel="stylesheet" href="styles.css">
+  
+</head>
+<style>/* General Styles */
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8d7da; /* Light red background */
+        color: #721c24; /* Dark red text */
+    }
+    
+    header {
+        background-color: #c82333; /* Blood red background */
+        color: white;
+        text-align: center;
+        padding: 20px;
+        font-size: 1rem;
+    }
+    
+    header h1 {
+        margin: 0;
+    }
+    
+    p {
+        font-style: italic;
+        text-align: center;
+        color: #721c24;
+        font-size: 1.2rem;
+        margin: 20px 0;
+    }
+    
+    .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    h2 {
+        color: #c82333; /* Blood red for the heading */
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+    
+    li {
+        margin-bottom: 20px;
+        background-color: #f8d7da;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    strong {
+        color: #c82333; /* Red emphasis for strong text */
+    }
+    
+    ul ul {
+        margin-top: 10px;
+    }
+    
+    ul ul li {
+        background-color: #f1f3f5; /* Light background for inner list */
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    
+    ul ul li strong {
+        color: #6c757d; /* Gray color for subitems */
+    }
+    
+    p {
+        font-size: 1rem;
+        color: #721c24;
+    }
+    
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+        header {
+            font-size: 2rem;
+        }
+    
+        .container {
+            padding: 15px;
+        }
+    
+        h2 {
+            font-size: 1.5rem;
+        }
+    
+        li {
+            padding: 10px;
+        }
+    
+        p {
+            font-size: 1rem;
+        }
+    }
+    </style>
+<body>
+    <header>
+        <h1>BachAO - Blood Donation System</h1>
+    </header>
+    <p>"The blood you donate gives someone another chance at life. One day, that someone may be you."</p>
+
+    <div class="container">
+        <h2>Available Blood Stocks</h2>
+        {% if blood_data %}
+            <ul>
+                {% for blood_group, entries in blood_data.items() %}
+                    <li>
+                        <strong>{{ blood_group }}</strong>
+                        <ul>
+                            {% for entry in entries %}
+                                <li>
+                                    <strong>Hospital:</strong> {{ entry.hospital }} <br>
+                                    <strong>Location:</strong> {{ entry.location }} <br>
+                                    <strong>Donor:</strong> {{ entry.donor_name }} <br>
+                                    <strong>Quantity:</strong> {{ entry.quantity }} units
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No blood stock available.</p>
+        {% endif %}
+    </div>
+
+</body>
+</html>
