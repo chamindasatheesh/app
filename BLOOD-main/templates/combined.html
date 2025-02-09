@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation App</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        header {
+            background-color: #c82333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display:flex;
+            align-items: center;
+            flex-direction: column;
+        }
+    
+        form {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #c82333;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select {
+            width: 95%;
+            padding: 8px;
+            border: 1px solid #c82333;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #c82333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #721c24;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #c82333;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            padding: 6px 12px;
+        }
+
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            table, form {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BachAO - Blood Donation System</h1>
+        <p>"The blood you donate gives someone another chance at life. One day, that someone may be you."</p>
+    </header>
+
+
+    <div class="container">
+        <h2>Update Blood Availability</h2>
+        <form action="/update_blood" method="POST">
+            <label for="hospital_name">Hospital Name:</label>
+            <input type="text" id="hospital_name" name="hospital_name" required>
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" name="location" required>
+
+            <label for="blood_group">Blood Group:</label>
+            <select name="blood_group" id="blood_group" required>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+            </select>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>
+
+            <label for="donor_name">Donor Name:</label>
+            <input type="text" id="donor_name" name="donor_name" required>
+
+            <button type="submit">Update Blood Stock</button>
+        </form>
+    </div>
+
+    <!-- Blood Stock Display -->
+    <div class="container">
+        <h2>Available Blood Stocks</h2>
+        {% if blood_data %}
+            <table>
+                <tr>
+                    <th>Blood Group</th>
+                    <th>Hospital</th>
+                    <th>Location</th>
+                    <th>Quantity</th>
+                    <th>Donor Name</th>
+                    <th>Action</th>
+                </tr>
+                {% for blood_group, entries in blood_data.items() %}
+                    {% for entry in entries %}
+                        <tr>
+                            <td>{{ blood_group }}</td>
+                            <td>{{ entry.hospital }}</td>
+                            <td>{{ entry.location }}</td>
+                            <td>{{ entry.quantity }}</td>
+                            <td>{{ entry.donor_name }}</td>
+                            <td>
+                                <form action="/delete_blood" method="POST" style="display:inline;">
+                                    <input type="hidden" name="hospital_name" value="{{ entry.hospital }}">
+                                    <input type="hidden" name="blood_group" value="{{ blood_group }}">
+                                    <input type="hidden" name="donor_name" value="{{ entry.donor_name }}">
+                                    <button type="submit" class="delete-btn">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+            </table>
+        {% else %}
+            <p>No blood stock available.</p>
+        {% endif %}
+    </div>
+
+    <!-- Donor History -->
+    <div class="container">
+        <h2>Donor History</h2>
+        <table>
+            <tr>
+                <th>Donor Name</th>
+                <th>Blood Group</th>
+                <th>Hospital</th>
+                <th>Location</th>
+                <th>Quantity</th>
+                <th>Donation Date</th>
+            </tr>
+            {% for donor in donors %}
+                <tr>
+                    <td>{{ donor[0] }}</td>
+                    <td>{{ donor[1] }}</td>
+                    <td>{{ donor[2] }}</td>
+                    <td>{{ donor[3] }}</td>
+                    <td>{{ donor[4] }}</td>
+                    <td>{{ donor[5] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+</html>
